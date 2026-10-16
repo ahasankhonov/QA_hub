@@ -1,0 +1,256 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "qa-profile",
+  "description": "Runtime profile the project-onboarder emits for any project. Drives the whole pipeline.",
+  "type": "object",
+  "required": [
+    "slug",
+    "name",
+    "platform",
+    "build",
+    "linear"
+  ],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "short id, e.g. zeta, epsilon"
+    },
+    "name": {
+      "type": "string"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "web",
+        "android",
+        "ios",
+        "api",
+        "desktop"
+      ]
+    },
+    "build": {
+      "type": "string",
+      "description": "staging URL, APK/IPA path, repo, or API base"
+    },
+    "buildMeta": {
+      "type": "object",
+      "description": "detected: package id, version, minSdk, framework, etc."
+    },
+    "workingFolder": {
+      "type": "string",
+      "description": "DEPRECATED — ignored by every script. Output paths derive from projects/<slug>/ (R-03). Do not emit."
+    },
+    "linear": {
+      "type": "object",
+      "required": [
+        "workspace",
+        "team",
+        "prefix"
+      ],
+      "properties": {
+        "workspace": {
+          "type": "string",
+          "default": "example-builders"
+        },
+        "team": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string",
+          "description": "PRO, EPS, ..."
+        },
+        "teamId": {
+          "type": "string"
+        },
+        "stagingQaStateId": {
+          "type": "string",
+          "description": "uuid of the Staging QA state"
+        },
+        "stateMap": {
+          "type": "object",
+          "description": "R-04 — logical route → this board's exact state name. Without it routing falls back to defaults and linear-plan refuses to run.",
+          "required": [
+            "pass",
+            "reopen",
+            "blocked",
+            "stagingQaHold",
+            "newBug"
+          ],
+          "properties": {
+            "pass": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reopen": {
+              "type": "string",
+              "minLength": 1
+            },
+            "blocked": {
+              "type": "string",
+              "minLength": 1
+            },
+            "stagingQaHold": {
+              "type": "string",
+              "minLength": 1
+            },
+            "newBug": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "stateIds": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "commentMentionSuffix": {
+          "type": "string"
+        },
+        "stateMapSource": {
+          "type": "string"
+        },
+        "noTracker": {
+          "type": "boolean",
+          "description": "true only for a project with no Linear team (e.g. Jira-tracked); lifts the stateMap requirement"
+        }
+      }
+    },
+    "bugAssignee": {
+      "type": "string",
+      "default": "the QA lead"
+    },
+    "accounts": {
+      "type": "object",
+      "description": "test creds; secrets stay local. 2 accounts for two-sided flows.",
+      "properties": {
+        "A": {
+          "type": "object"
+        },
+        "B": {
+          "type": "object"
+        },
+        "admin": {
+          "type": "object"
+        }
+      }
+    },
+    "harness": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "playwright | android-emulator | ios-sim | http"
+        },
+        "device": {
+          "type": "string",
+          "description": "e.g. Pixel_6_API34 / iPhone 16 Pro"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "green",
+            "needs-setup",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "properties": {
+        "sow": {
+          "type": "string",
+          "description": "path to SoW / delivery-handoff doc"
+        },
+        "figma": {
+          "type": "string"
+        },
+        "mailbox": {
+          "type": "string",
+          "description": "Gmail inbox + alias trick, if authorized"
+        }
+      }
+    },
+    "connectors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "authorized: Linear, Figma, Gmail"
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "unknowns the onboarder still needs from the user"
+    },
+    "surfaces": {
+      "type": "object",
+      "description": "R-13 — host per role; forbidden[] is what harness/<slug>/config.mjs refuses at the URL level",
+      "properties": {
+        "forbidden": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "buildProbe": {
+      "type": "object",
+      "description": "R-06 — URL probes (pattern + probes[]) for web, or an apk path under projects/<slug>/ for android",
+      "properties": {
+        "pattern": {
+          "type": "string"
+        },
+        "probes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "url"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "pattern": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "apk": {
+          "type": "string"
+        }
+      }
+    },
+    "safety": {
+      "description": "see README"
+    },
+    "prodSafety": {
+      "description": "see README"
+    },
+    "routes": {
+      "description": "see README"
+    },
+    "builds": {
+      "description": "see README"
+    },
+    "qaQueue": {
+      "description": "narrative only — unread by code"
+    }
+  },
+  "$comment": "Documents the shape the onboarder emits. R-03: everything lives in projects/<slug>/ — workingFolder is deprecated and ignored. Pipeline-critical fields: linear.stateMap (R-04), surfaces.forbidden (R-13), buildProbe (R-06)."
+}

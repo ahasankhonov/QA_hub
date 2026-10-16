@@ -1,0 +1,70 @@
+{
+  "slug": "alpha",
+  "name": "ALPHA (fixture)",
+  "platform": "web",
+  "build": "STAGING (test target): staging-customer.alpha.example · staging-dealer.alpha.example · staging-admin.alpha.example · api staging-api.alpha.example/api/v1. staging.alpha.example (master/landing) not reachable as of 2026-07-21. PROD (alpha.example) is OFF-LIMITS.",
+  "linear": {
+    "workspace": "example-builders",
+    "team": "Alpha",
+    "teamId": "22a42eb3-f02d-471c-883e-ab01ac382e5f",
+    "prefix": "ALP",
+    "stagingQaStateId": "975309fa-9cce-40a0-8a16-3084c478538e",
+    "stateMap": {
+      "pass": "Release Candidate",
+      "reopen": "Reopen",
+      "blocked": "Blocked",
+      "stagingQaHold": "Staging QA",
+      "newBug": "Ready for Dev"
+    },
+    "commentMentionSuffix": "",
+    "stateMapSource": "the QA lead, 2026-08-12: pass → Release Candidate · fail → Reopen · partially fixed → Reopen · decision-needed → Blocked. R-04 resolves logical routes through this map."
+  },
+  "surfaces": {
+    "storefrontCustomer": "staging-customer.alpha-store.example",
+    "customer": "staging-customer.alpha.example",
+    "dealer": "staging-dealer.alpha.example",
+    "admin": "staging-admin.alpha.example",
+    "api": "staging-api.alpha.example",
+    "storefrontDisabled": "store.alpha-store.example — NOT a staging surface. This is dealer 1's LIVE branded storefront (apex alpha-store.example 301→store.*). It was listed as an allowed `storefront` surface until 2026-08-13, which put it in assertStaging()'s allow-list and meant R-13 would NOT have blocked a navigation to it. Renamed (not deleted) so the tenancy note above still resolves and so any code reading `surfaces.storefront` fails loudly instead of silently falling back. If a real STAGING storefront host exists, add it here as `storefront`; do not restore this one.",
+    "forbidden": [
+      "alpha.example",
+      "www.alpha.example",
+      "api.alpha.example",
+      "gateway.payments.example",
+      "store.alpha-store.example",
+      "alpha-store.example"
+    ],
+    "storefront": "staging.alpha-store.example",
+    "allowedPatterns": [
+      "^staging[.-][a-z0-9.-]*\\.(alpha|alpha-store)\\.example$",
+      "^[a-z0-9-]+\\.landing\\.alpha\\.example$"
+    ]
+  },
+  "buildProbe": {
+    "pattern": "assets/(index-[A-Za-z0-9_-]+\\.js)",
+    "probes": [
+      {
+        "name": "customer",
+        "url": "https://staging-customer.alpha.example/"
+      },
+      {
+        "name": "dealer",
+        "url": "https://staging-dealer.alpha.example/"
+      },
+      {
+        "name": "admin",
+        "url": "https://staging-admin.alpha.example/"
+      }
+    ]
+  },
+  "accounts": {
+    "shared_qa": {
+      "email": "qa-shared@alpha.example"
+    }
+  },
+  "harness": {
+    "kind": "playwright",
+    "device": "headless Chromium",
+    "status": "node+playwright-cli ready; browser binaries NOT yet installed (install at go); two isolated contexts for two-actor flows"
+  }
+}

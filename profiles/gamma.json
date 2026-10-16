@@ -1,0 +1,254 @@
+{
+  "slug": "gamma",
+  "name": "GAMMA (fixture)",
+  "platform": "web",
+  "build": "https://gamma-app.example",
+  "linear": {
+    "workspace": "n/a (tracker is Asana)",
+    "team": "(none -- tracked in Asana, 4 boards)",
+    "prefix": "GAM",
+    "noTracker": true,
+    "stateMapSource": "Asana COLUMN names from the QA handoff PDF (2026-10-02), not yet read off the boards (connector unauthorized). Used by gen-counts/gen-summary for proposed states and by scripts/asana-plan.mjs, which resolves each column to a per-board section gid via the asana block below. linear-plan.mjs / linear-newbugs-plan.mjs refuse this project (tracker.kind=asana). Verify the names against the live boards on first READ-only pull and set tracker.columnsVerified=true.",
+    "commentMentionSuffix": "",
+    "stateMap": {
+      "pass": "Release Candidate",
+      "reopen": "Reopen",
+      "blocked": "Blocked",
+      "stagingQaHold": "Staging QA",
+      "newBug": "Gathering Requirements"
+    }
+  },
+  "tracker": {
+    "kind": "asana",
+    "connectorAuthorized": true,
+    "boards": [
+      "Gamma Survey & QC App",
+      "Gamma Reporting App",
+      "Gamma EDW",
+      "Gamma App"
+    ],
+    "columns": [
+      "Gathering Requirements",
+      "Blocked",
+      "Ready for Dev",
+      "In Development",
+      "Committed",
+      "Staging QA",
+      "Release Candidate",
+      "Reopen",
+      "Production QA",
+      "Done",
+      "Canceled",
+      "Duplicate"
+    ],
+    "columnsVerified": true,
+    "routing": {
+      "pass": "Release Candidate + test-evidence comment (confirmed by the client QA 2026-10-06: items she had moved to Done went back to Release Candidate; Gamma reviews the board daily)",
+      "fail": "Reopen + comment + linked bug",
+      "newBug": "Gathering Requirements on the app's board. A NEW Asana ticket per bug, not a comment on the related ticket; one per bug or a grouped umbrella both OK; out-of-scope findings may be reported (the client QA/the backend dev 2026-10-06)"
+    },
+    "bugConventions": {
+      "title": "Area: Screen: what's wrong",
+      "severity": [
+        "Blocker",
+        "Critical",
+        "Major",
+        "Minor",
+        "Trivial"
+      ],
+      "priority": [
+        "Highest",
+        "High",
+        "Medium",
+        "Low",
+        "Lowest"
+      ]
+    },
+    "ticketPrefix": "GAM-<n>",
+    "stateMapSource": "handoff PDF 2026-10-02; columns VERIFIED against all 4 live boards 2026-10-06 (asana_get_project_sections, READ-only) -- each board has exactly the 12 handoff sections, names identical"
+  },
+  "surfaces": {
+    "web": "gamma-app.example",
+    "forbidden": [
+      "www.gamma-app.example"
+    ],
+    "api": "api.gamma-backend.example"
+  },
+  "buildProbe": {
+    "pattern": "assets/(index-[A-Za-z0-9_-]+\\.js)",
+    "probes": [
+      {
+        "name": "web",
+        "url": "https://gamma-app.example/"
+      }
+    ]
+  },
+  "accounts": {
+    "shared_qa": {
+      "email": "qa-shared@gamma.example"
+    }
+  },
+  "routes": {
+    "gate": "/ (Vercel, until passed)",
+    "login": "/login",
+    "hub": "/hub",
+    "shell": [
+      "/",
+      "/annotations",
+      "/surveys",
+      "/surveys/:id",
+      "/question-master",
+      "/qc",
+      "/reporting",
+      "/intelligence",
+      "/dashboards",
+      "/admin",
+      "/admin/roles",
+      "/design/buttons"
+    ],
+    "sidebarMap": {
+      "Home": "/",
+      "Tasks": "/annotations",
+      "Surveys": "/surveys",
+      "Question Master": "/question-master",
+      "Dashboard": "/dashboards",
+      "AI assistant": "/intelligence",
+      "User Management": "/admin",
+      "Role Management": "/admin/roles"
+    },
+    "notInSidebar": "Enterprise QC (/qc) and Reporting (/reporting) have no sidebar entry even for Administrator; they are reached from the Home tiles, the top tab strip, or by URL. /design/buttons is an in-app design-kit page with no navigation entry.",
+    "implemented": [
+      "/login",
+      "/hub",
+      "/",
+      "/annotations",
+      "/surveys",
+      "/surveys/:id",
+      "/question-master",
+      "/design/buttons"
+    ],
+    "placeholders": "/qc, /reporting, /intelligence, /dashboards, /admin, /admin/roles render a 'built in a later phase -- This surface is not yet implemented' card (the router guard still applies to them).",
+    "unknownRoute": "A client-side unknown path shows the raw react-router default 'Unexpected Application Error! 404 Not Found' screen (no errorElement). An unknown /surveys/<id> shows 'Survey not found'.",
+    "hubTiles": "Survey App / Reporting / Gamma Intelligence -- all three link to '/'.",
+    "deniedState": "Access restricted -- your current role does not have {read|write|approve} access to this area. (copy contains an em dash). Only the 'read' variant was observed; write/approve denial needs write actions and was not exercised (read-only mandate).",
+    "roleModuleAccess": "see harness/gamma/config.mjs ROLES (observed 2026-10-05 on index-DmFXU2b0.js)"
+  },
+  "harness": {
+    "kind": "playwright",
+    "device": "desktop Chromium 1440x900 (Chrome primary; Edge/Firefox secondary; Safari for the app only, not with Decipher)",
+    "status": "needs-setup",
+    "location": "harness/gamma/"
+  },
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "desktopOnly": true,
+    "figmaFrames": "1440px"
+  },
+  "browsers": {
+    "primary": "Chrome",
+    "secondary": [
+      "Edge",
+      "Firefox"
+    ],
+    "safari": "app only -- never with Decipher (Decipher-side limitation, not our defect)"
+  },
+  "outOfScope": [
+    "Dashboard (v2)",
+    "GAM-800 to GAM-807",
+    "Market Intelligence LLM and client-facing MCP/MI",
+    "GAM-308",
+    "GAM-727",
+    "GAM-131",
+    "Safari with Decipher"
+  ],
+  "asana": {
+    "workspaceGid": "1723813720250979",
+    "toolsVerifiedAt": "2026-10-06",
+    "tools": {
+      "comment": {
+        "name": "mcp__claude_ai_Asana__asana_create_task_story",
+        "args": {
+          "task": "task_id",
+          "text": "text"
+        }
+      },
+      "move": null
+    },
+    "boards": {
+      "Gamma Survey & QC App": {
+        "projectGid": "1931211210681574",
+        "sections": {
+          "Gathering Requirements": "1001261504436175",
+          "Blocked": "1748731033929038",
+          "Ready for Dev": "1153528180942948",
+          "In Development": "1587003122186356",
+          "Committed": "1395368160040090",
+          "Staging QA": "1930666351023033",
+          "Release Candidate": "1333493356287125",
+          "Reopen": "1566035544194113",
+          "Production QA": "1218924512443643",
+          "Done": "1411379021544373",
+          "Canceled": "1879384477573860",
+          "Duplicate": "1814113514565294"
+        }
+      },
+      "Gamma Reporting App": {
+        "projectGid": "1527585637113283",
+        "sections": {
+          "Gathering Requirements": "1758209938712560",
+          "Blocked": "1905632692020220",
+          "Ready for Dev": "1386559775687086",
+          "In Development": "1075265405178812",
+          "Committed": "1177236242583555",
+          "Staging QA": "1545304852336081",
+          "Release Candidate": "1617914171607749",
+          "Reopen": "1109207474441175",
+          "Production QA": "1972492694691208",
+          "Done": "1744649231243796",
+          "Canceled": "1827546152182155",
+          "Duplicate": "1102096798887465"
+        }
+      },
+      "Gamma EDW": {
+        "projectGid": "1906964901677979",
+        "sections": {
+          "Gathering Requirements": "1944567390471411",
+          "Blocked": "1934463528618277",
+          "Ready for Dev": "1143416927916677",
+          "In Development": "1466628305754435",
+          "Committed": "1359964700556043",
+          "Staging QA": "1163599071263583",
+          "Release Candidate": "1039162577911140",
+          "Reopen": "1178068614977574",
+          "Production QA": "1773929318343345",
+          "Done": "1580443278431042",
+          "Canceled": "1903262574538161",
+          "Duplicate": "1151858541571970"
+        }
+      },
+      "Gamma App": {
+        "projectGid": "1587505324165330",
+        "sections": {
+          "Gathering Requirements": "1280887557948763",
+          "Blocked": "1534101046177527",
+          "Ready for Dev": "1766579184944384",
+          "In Development": "1935056620745923",
+          "Committed": "1099693365477078",
+          "Staging QA": "1594616351853324",
+          "Release Candidate": "1442600123800000",
+          "Reopen": "1090253132807779",
+          "Production QA": "1051744405893753",
+          "Done": "1261160014606523",
+          "Canceled": "1040167167710175",
+          "Duplicate": "1267081098434828"
+        }
+      }
+    },
+    "workspaceName": "<set at onboarding>",
+    "archivedDuplicates": {
+      "Gamma Reporting App": "1121449573769716 (archived -- NOT the live board; use 1527585637113283)"
+    },
+    "moveMode": "manual"
+  }
+}

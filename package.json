@@ -1,0 +1,22 @@
+{
+  "name": "qa-hub",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "the agency multi-agent QA hub — the gates, the harness and the generated deliverables. No runtime dependencies: the gates run on stock Node; Playwright (dev only) drives the browser harness.",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright": "1.59.1"
+  },
+  "scripts": {
+    "selftest": "node scripts/selftest-gates.mjs",
+    "gates": "node scripts/qa-gates.mjs",
+    "counts": "node scripts/gen-counts.mjs",
+    "approvals": "node scripts/qa-approve.mjs --list",
+    "cost": "node scripts/session-cost.mjs",
+    "prune-backups": "node scripts/prune-backups.mjs",
+    "doc": "node scripts/read-doc.mjs"
+  }
+}

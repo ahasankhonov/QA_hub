@@ -1,0 +1,105 @@
+{
+  "slug": "beta",
+  "name": "BETA (fixture)",
+  "platform": [
+    "web",
+    "android",
+    "ios"
+  ],
+  "linear": {
+    "workspace": "example-builders",
+    "team": "(none — tracked in Jira BET)",
+    "prefix": "BET",
+    "stateMap": {
+      "pass": "STAGING",
+      "reopen": "Ready for dev",
+      "blocked": "READY FOR QA",
+      "stagingQaHold": "READY FOR QA",
+      "newBug": "Backlog"
+    },
+    "stateMapSource": "Jira BET workflow via getTransitionsForJiraIssue BET-100 on 2026-09-10 (all transitions global); the workflow has no Blocked status, so blocked/hold verdicts stay in READY FOR QA with a comment",
+    "commentMentionSuffix": ""
+  },
+  "accounts": {
+    "shared_qa": {
+      "email": "qa-shared@beta.example"
+    }
+  },
+  "harness": {
+    "kind": "playwright",
+    "status": "green",
+    "module": "harness/beta",
+    "verified": "2026-09-10 smoke-check + tickets/BET-92.mjs pilot passed run-result-validate --build"
+  },
+  "surfaces": {
+    "student": "web.beta.example:8443",
+    "studentAlias": "web.beta.example",
+    "admin": "test.beta-admin.example",
+    "api": "test.beta-api.example",
+    "android": "com.beta",
+    "forbidden": [
+      "beta-admin.example",
+      "www.beta-admin.example",
+      "beta.example",
+      "www.beta.example",
+      "beta-api.example",
+      "www.beta-api.example"
+    ],
+    "ios": "com.allinsan.beta"
+  },
+  "buildProbe": {
+    "pattern": "assets/(index-[A-Za-z0-9_-]+\\.js)",
+    "probes": [
+      {
+        "name": "student",
+        "url": "https://web.beta.example:8443/"
+      },
+      {
+        "name": "admin",
+        "url": "https://test.beta-admin.example/"
+      },
+      {
+        "name": "android",
+        "kind": "apk",
+        "path": "projects/beta/builds/beta-1.2.1-22-debug-test.beta-api.example.apk"
+      },
+      {
+        "name": "ios",
+        "kind": "ios-app",
+        "path": "projects/beta/ios-build-1.6.7-32/Beta.app"
+      }
+    ]
+  },
+  "jira": {
+    "site": "https://example.atlassian.net",
+    "cloudId": "a6efb4a9-7633-46f7-83df-5a84fad0099a",
+    "projectKey": "BET",
+    "queueStatus": "READY FOR QA",
+    "jql": "project = BET AND status = \"READY FOR QA\" ORDER BY key ASC",
+    "transitions": {
+      "Backlog": "11",
+      "Ready for dev": "21",
+      "In Progress": "31",
+      "Committed": "41",
+      "READY FOR QA": "51",
+      "STAGING": "2",
+      "PRODUCTION": "3"
+    },
+    "tools": {
+      "transition": "mcp__claude_ai_Atlassian__transitionJiraIssue",
+      "comment": "mcp__claude_ai_Atlassian__addCommentToJiraIssue",
+      "create": "mcp__claude_ai_Atlassian__createJiraIssue"
+    },
+    "commentFormat": "markdown",
+    "tokenFile": ".secrets/jira-api-token",
+    "newBugLabel": "qa-found",
+    "newBugTitlePrefix": "[Web] BET",
+    "newBugTitlePrefixes": {
+      "web": "[Web] BET",
+      "android": "[Android] BET",
+      "ios": "[iOS] BET",
+      "mobile": "[Mobile] BET"
+    },
+    "mobileLabel": "mobile"
+  }
+}

@@ -1,0 +1,18 @@
+# evidence, results, approvals, secrets and tooling never leave this machine
+projects/*/
+reports/*
+!reports/_PORTFOLIO.md
+.qa-approvals/*
+!.qa-approvals/README.md
+.qa-backups/
+.qa-selftest/
+.qa-slack/
+.secrets/*
+!.secrets/README.md
+.tools/
+node_modules/
+**/.state/
+**/_attachments/
+**/_rendered/
+**/_md/
+.DS_Store
